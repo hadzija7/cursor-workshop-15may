@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cursor Café Planner
+
+A small Next.js demo repo for a 15-minute workshop on Cursor across the SDLC.
+
+The app is intentionally simple: a coworking group chooses lunch options, filters meals by dietary needs, adds meals to a shared plan, and sees cost, servings, and ingredients. The domain is familiar enough for non-engineers, but still gives you real software work to demonstrate: planning, UI edits, debugging, tests, review, docs, and automation.
 
 ## Getting Started
 
-First, run the development server:
+Install and run with `pnpm`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm lint
+pnpm build
+pnpm test
+pnpm suggest
+```
 
-## Learn More
+`pnpm suggest` is the Cursor SDK demo. It requires `CURSOR_API_KEY` and asks a local Cursor agent to inspect `TODO.md` and suggest the next workshop improvement.
 
-To learn more about Next.js, take a look at the following resources:
+## Workshop Flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Use `docs/workshop-script.md` as the presenter script.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The intended 15-minute arc is:
 
-## Deploy on Vercel
+1. Ask Cursor to understand the repo and create a short implementation plan.
+2. Use Agent mode to improve the planner UI across multiple files.
+3. Switch to Debug mode for the duplicate-add bug in the meal plan.
+4. Use Multitask to parallelize tests, UI/accessibility review, and docs updates.
+5. Show the Cursor SDK script as an example of SDLC automation outside the IDE.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Important Demo Detail
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The app currently allows adding the same meal more than once. That is deliberate: it gives Debug mode a visible, low-risk bug to diagnose and fix live.
