@@ -21,26 +21,33 @@ best next improvement to demonstrate, with:
 Do not edit files. Return a concise recommendation.
 `;
 
-try {
-  const result = await Agent.prompt(prompt, {
-    apiKey,
-    model: { id: "composer-2" },
-    local: { cwd: process.cwd() },
-  });
+async function main() {
+  try {
+    const result = await Agent.prompt(prompt, {
+      apiKey,
+      model: { id: "composer-2" },
+      local: { cwd: process.cwd() },
+    });
 
-  if (result.status === "error") {
-    console.error("Cursor agent run failed.");
-    process.exit(2);
+    if (result.status === "error") {
+      console.error("Cursor agent run failed.");
+      process.exit(2);
+    }
+
+    console.log(result.result);
+  } catch (error) {
+    if (error instanceof CursorAgentError) {
+      console.error(
+        `Cursor agent failed to start: ${error.message} retryable=${error.isRetryable}`,
+      );
+      process.exit(1);
+    }
+
+    throw error;
   }
-
-  console.log(result.result);
-} catch (error) {
-  if (error instanceof CursorAgentError) {
-    console.error(
-      `Cursor agent failed to start: ${error.message} retryable=${error.isRetryable}`,
-    );
-    process.exit(1);
-  }
-
-  throw error;
 }
+
+void main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
