@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Meal } from "./meals";
-import { filterMeals, formatCurrency, summarizePlan } from "./plan";
+import { filterMeals, formatCurrency, summarizePlan, type PlanLine } from "./plan";
 
 const testMeals: Meal[] = [
   {
@@ -39,12 +39,27 @@ describe("filterMeals", () => {
   });
 });
 
+const testLines: PlanLine[] = [
+  { meal: testMeals[0], quantity: 1 },
+  { meal: testMeals[1], quantity: 1 },
+];
+
 describe("summarizePlan", () => {
   it("calculates cost, servings, and unique sorted ingredients", () => {
-    expect(summarizePlan(testMeals)).toEqual({
+    expect(summarizePlan(testLines)).toEqual({
       totalCost: 62,
       totalServings: 10,
       ingredients: ["chicken", "lemon", "lime", "rice", "tofu"],
+    });
+  });
+
+  it("scales totals by line quantity", () => {
+    expect(
+      summarizePlan([{ meal: testMeals[0], quantity: 2 }]),
+    ).toEqual({
+      totalCost: 40,
+      totalServings: 8,
+      ingredients: ["lime", "rice", "tofu"],
     });
   });
 });

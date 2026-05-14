@@ -37,7 +37,7 @@ This repo is a 15-minute Cursor SDLC workshop demo. Keep changes easy to explain
 ## Working Rules
 
 - Use `pnpm`, not `npm` or `yarn`.
-- Keep the duplicate-add bug unless the task is explicitly the Debug mode fix.
+- Baseline UX: each meal is added once at quantity `1` with a disabled green **Added** button when selected; see `specs/meal-planner.md` for the multi-quantity workshop extension.
 - Prefer pure helpers in `src/lib/plan.ts` for calculations that need tests.
 - Keep UI changes accessible enough for a live demo: labels, buttons, readable contrast, and obvious states.
 - Update `TODO.md`, `docs/workshop-script.md`, or `specs/meal-planner.md` when a workshop step changes.

@@ -26,24 +26,23 @@ Suggested prompt:
 Improve the planner UI so the filters and lunch summary are easier for workshop attendees to understand. Keep the changes small and explain what files you plan to edit before editing.
 ```
 
-## Phase 3: Debug Duplicate Adds
+## Phase 3: Multiple Quantities per Meal
 
-- [ ] Reproduce the bug: click the same meal twice and watch cost, servings, and ingredients inflate.
-- [ ] Switch to Debug mode.
-- [ ] Ask Cursor to gather evidence from the UI state and code path.
-- [ ] Fix the root cause so one meal can only appear once in the plan.
-- [ ] Verify the button label and summary still make sense after the fix.
+- [ ] Confirm baseline: each dish appears once at quantity `1`, green **Added** on the card when selected.
+- [ ] Implement quantity controls (increment/decrement, minimum `1`, or remove line).
+- [ ] Keep one `PlanLine` per `meal.id`; scale totals through `summarizePlan`.
+- [ ] Verify cost, servings, and ingredients behave correctly when quantity changes.
 
 Suggested prompt:
 
 ```text
-Debug this bug: clicking the same meal twice adds it twice to the lunch plan and inflates the totals. Gather evidence first, identify the root cause, then propose the smallest safe fix.
+Implement multiple quantities per meal in the café planner. Baseline state stores each dish once at quantity 1. Add UI to increase/decrease quantity (minimum 1) or remove the line, keep totals correct via summarizePlan(planLines), and update specs/meal-planner.md if behavior changes.
 ```
 
 ## Phase 4: Multitask Quality Work
 
 - [ ] Use Multitask to run parallel agents for separate workstreams.
-- [ ] Agent A: add focused tests for filtering, summaries, and duplicate handling.
+- [ ] Agent A: add focused tests for filtering, summaries, and quantity scaling.
 - [ ] Agent B: review the UI/accessibility and suggest small improvements.
 - [ ] Agent C: update workshop docs with what changed.
 - [ ] Merge only the useful, low-risk outputs.
@@ -51,7 +50,7 @@ Debug this bug: clicking the same meal twice adds it twice to the lunch plan and
 Suggested multitask prompt:
 
 ```text
-Run three parallel tasks: one agent should add focused tests for meal-plan logic, one should review the UI/accessibility and suggest small improvements, and one should update the workshop notes to reflect the duplicate-add fix. Keep changes small and report conflicts.
+Run three parallel tasks: one agent should add focused tests for meal-plan logic (including quantity scaling), one should review the UI/accessibility and suggest small improvements, and one should update the workshop notes to reflect the multi-quantity feature. Keep changes small and report conflicts.
 ```
 
 ## Phase 5: Extract More Pure Helpers

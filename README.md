@@ -34,10 +34,10 @@ The intended 15-minute arc is:
 
 1. Ask Cursor to understand the repo and create a short implementation plan.
 2. Use Agent mode to improve the planner UI across multiple files.
-3. Switch to Debug mode for the duplicate-add bug in the meal plan.
+3. Use Agent mode (or Debug mode if needed) to add multiple quantities per meal on top of the baseline single-add behavior.
 4. Use Multitask to parallelize tests, UI/accessibility review, and docs updates.
 5. Show the Cursor SDK script as an example of SDLC automation outside the IDE.
 
 ## Important Demo Detail
 
-The app currently allows adding the same meal more than once. That is deliberate: it gives Debug mode a visible, low-risk bug to diagnose and fix live.
+The baseline app adds each meal at most once with quantity `1` and shows a green **Added** state on the card. The workshop extension layers on quantity controls while keeping one plan row per dish (`PlanLine` in `src/lib/plan.ts`).

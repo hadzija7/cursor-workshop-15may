@@ -51,14 +51,16 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
         </div>
         <button
           type="button"
+          disabled={isSelected}
+          aria-label={isSelected ? `${meal.name} added to plan` : undefined}
           onClick={() => onAdd(meal)}
           className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
             isSelected
-              ? "bg-orange-100 text-orange-800 hover:bg-orange-200"
+              ? "cursor-default bg-emerald-600 text-white"
               : "bg-stone-950 text-white hover:bg-stone-800"
           }`}
         >
-          {isSelected ? "Add again" : "Add to plan"}
+          {isSelected ? "Added" : "Add to plan"}
         </button>
       </div>
     </article>

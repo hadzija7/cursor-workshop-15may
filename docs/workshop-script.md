@@ -53,30 +53,33 @@ Show:
 Fallback if time is tight:
 
 - Ask Cursor to only add one summary metric.
-- Skip visual polish and move to Debug mode.
+- Skip visual polish and move to the quantity task.
 
-### 5:00-8:00 Debug Mode
+### 5:00-8:00 Multi-Quantity Workshop Task
 
-Reproduce the bug:
+Establish baseline behavior:
 
-1. Click one meal once.
-2. Click the same meal again.
-3. Point out that the plan total and servings inflate.
+1. Add a meal once and note the green **Added** button and quantity `×1` in the summary.
+2. Explain that coworkers often want two trays of the same dish.
 
-Switch to Debug mode.
+Switch to Agent mode (or Debug mode if something regresses).
 
 Prompt:
 
 ```text
-Debug this bug: clicking the same meal twice adds it twice to the lunch plan and inflates the totals. Gather evidence first, identify the root cause, then propose the smallest safe fix.
+Implement multiple quantities per meal in the café planner. Baseline state stores each dish once at quantity 1. Add UI to increase/decrease quantity (minimum 1) or remove the line, keep totals correct via summarizePlan(planLines), and update specs/meal-planner.md if behavior changes.
 ```
 
 Show:
 
-- Debug mode gathering evidence instead of guessing.
-- The root cause in `addMealToPlan`.
-- A small patch that prevents duplicates.
-- Verification by repeating the browser action.
+- Reading `PlanLine` and `summarizePlan` in `src/lib/plan.ts`.
+- Wiring controls without duplicate rows for the same `meal.id`.
+- Verification in the browser and with `pnpm test`.
+
+Fallback if time is tight:
+
+- Implement only increment-from-summary or only one extra control.
+- Mention tests as homework.
 
 ### 8:00-11:00 Multitask
 
@@ -85,7 +88,7 @@ Say: "Now the work splits naturally: tests, review, and docs do not need to happ
 Multitask prompt:
 
 ```text
-Run three parallel tasks: one agent should add focused tests for meal-plan logic, one should review the UI/accessibility and suggest small improvements, and one should update the workshop notes to reflect the duplicate-add fix. Keep changes small and report conflicts.
+Run three parallel tasks: one agent should add focused tests for meal-plan logic (including quantity scaling), one should review the UI/accessibility and suggest small improvements, and one should update the workshop notes to reflect the multi-quantity feature. Keep changes small and report conflicts.
 ```
 
 Show:
@@ -103,7 +106,7 @@ Fallback if time is tight:
 Prompt:
 
 ```text
-Add focused tests for the pure meal-plan helpers. Cover filtering, total cost, total servings, and the duplicate-handling behavior we just fixed.
+Add focused tests for the pure meal-plan helpers. Cover filtering, total cost, total servings, ingredient aggregation, and quantity scaling on plan lines.
 ```
 
 Run:

@@ -5,12 +5,12 @@ import { DietFilter } from "@/components/diet-filter";
 import { MealGrid } from "@/components/meal-grid";
 import { PlanSummary } from "@/components/plan-summary";
 import { meals, type DietTag, type Meal } from "@/lib/meals";
-import { filterMeals } from "@/lib/plan";
+import { filterMeals, type PlanLine } from "@/lib/plan";
 
 export function CafePlanner() {
   const [selectedDiet, setSelectedDiet] = useState<DietTag | "all">("all");
   const [maxPrepMinutes, setMaxPrepMinutes] = useState(45);
-  const [selectedMeals, setSelectedMeals] = useState<Meal[]>([]);
+  const [planLines, setPlanLines] = useState<PlanLine[]>([]);
 
   const filteredMeals = useMemo(
     () => filterMeals(meals, selectedDiet, maxPrepMinutes),
@@ -18,8 +18,10 @@ export function CafePlanner() {
   );
 
   function addMealToPlan(meal: Meal) {
-    // Workshop bug: duplicate clicks add the same meal twice. Use Debug mode to fix it live.
-    setSelectedMeals((currentMeals) => [...currentMeals, meal]);
+    setPlanLines((lines) => {
+      if (lines.some((line) => line.meal.id === meal.id)) return lines;
+      return [...lines, { meal, quantity: 1 }];
+    });
   }
 
   return (
@@ -46,7 +48,10 @@ export function CafePlanner() {
               <ol className="mt-4 space-y-3 text-sm leading-6 text-stone-300">
                 <li>1. Plan a scoped improvement with Cursor.</li>
                 <li>2. Let Agent mode edit the UI across components.</li>
-                <li>3. Use Debug mode on a visible duplicate-add bug.</li>
+                <li>
+                  3. Extend the plan so coworkers can order multiple quantities
+                  of the same meal.
+                </li>
                 <li>4. Multitask tests, review, and docs in parallel.</li>
                 <li>5. Show the Cursor SDK as SDLC automation.</li>
               </ol>
@@ -64,14 +69,14 @@ export function CafePlanner() {
             />
             <MealGrid
               meals={filteredMeals}
-              selectedMealIds={selectedMeals.map((meal) => meal.id)}
+              selectedMealIds={planLines.map((line) => line.meal.id)}
               onAddMeal={addMealToPlan}
             />
           </div>
 
           <PlanSummary
-            selectedMeals={selectedMeals}
-            onClear={() => setSelectedMeals([])}
+            planLines={planLines}
+            onClear={() => setPlanLines([])}
           />
         </div>
       </section>

@@ -1,13 +1,12 @@
-import type { Meal } from "@/lib/meals";
-import { formatCurrency, summarizePlan } from "@/lib/plan";
+import { formatCurrency, summarizePlan, type PlanLine } from "@/lib/plan";
 
 type PlanSummaryProps = {
-  selectedMeals: Meal[];
+  planLines: PlanLine[];
   onClear: () => void;
 };
 
-export function PlanSummary({ selectedMeals, onClear }: PlanSummaryProps) {
-  const summary = summarizePlan(selectedMeals);
+export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
+  const summary = summarizePlan(planLines);
 
   return (
     <aside className="sticky top-6 rounded-[2rem] border border-stone-200 bg-stone-950 p-6 text-white shadow-2xl shadow-stone-300/40">
@@ -19,26 +18,29 @@ export function PlanSummary({ selectedMeals, onClear }: PlanSummaryProps) {
           <h2 className="mt-2 text-2xl font-semibold">Friday lunch</h2>
         </div>
         <span className="rounded-full bg-white/10 px-3 py-1 text-sm">
-          {selectedMeals.length} picks
+          {planLines.length} picks
         </span>
       </div>
 
-      {selectedMeals.length === 0 ? (
+      {planLines.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-white/20 p-5 text-sm leading-6 text-stone-300">
-          Add meals from the cards to build a shared coworking lunch plan. The
-          duplicate-add behavior is intentionally left for the Debug mode demo.
+          Add meals from the cards to build a shared coworking lunch plan. Each
+          dish starts at quantity 1; a later workshop step adds repeat orders
+          of the same meal.
         </div>
       ) : (
         <>
           <ul className="mt-6 space-y-3">
-            {selectedMeals.map((meal, index) => (
+            {planLines.map((line) => (
               <li
-                key={`${meal.id}-${index}`}
+                key={line.meal.id}
                 className="rounded-2xl bg-white/10 p-3 text-sm"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span>{meal.name}</span>
-                  <span className="text-stone-300">{meal.servings} serves</span>
+                  <span>{line.meal.name}</span>
+                  <span className="text-stone-300">
+                    ×{line.quantity} · {line.meal.servings} serves each
+                  </span>
                 </div>
               </li>
             ))}

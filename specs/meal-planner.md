@@ -13,19 +13,22 @@ Cursor Café Planner helps a coworking group choose a shared lunch. It is intent
 
 - Display a set of meal options with name, description, diet tags, prep time, servings, estimated cost, ingredients, and a short vibe.
 - Allow filtering by diet tag and maximum prep time.
-- Allow adding meals to a lunch plan.
-- Show selected meals, total estimated cost, total servings, and a starter shopping list.
+- Allow adding meals to a lunch plan as distinct rows with a **quantity** (baseline app uses quantity `1` only).
+- Prevent adding the same meal twice as separate rows until the quantity workshop extension is implemented; already-added meals show a disabled green **Added** control on the card.
+- Show selected meals (with quantity and servings metadata), total estimated cost, total servings, and a starter shopping list.
 - Allow clearing the selected plan.
 
-## Deliberate Workshop Bug
+## Baseline vs Workshop Extension
 
-The initial implementation allows duplicate meal additions. Clicking the same meal twice adds it twice to the plan and inflates totals. This is intentional and should be preserved until the Debug mode workshop step.
+**Baseline (shipping demo):**
 
-Expected post-debug behavior:
+- Each meal appears at most once in the plan with quantity `1`.
+- Totals use `summarizePlan(planLines)` where each line is `{ meal, quantity }`.
 
-- A meal can appear in the plan at most once.
-- Re-clicking an already selected meal should either do nothing or clearly communicate that it is already selected.
-- Total cost, servings, and ingredient list should be based on unique selected meals.
+**Workshop extension:**
+
+- Allow ordering **multiple quantities** of the same meal (for example increment/decrement controls on the card or in the summary list).
+- Totals and ingredient aggregation must scale with line quantity (`summarizePlan` already multiplies cost and servings by `quantity`; extend UI and state updates accordingly).
 
 ## Data Model
 
@@ -42,12 +45,14 @@ Expected post-debug behavior:
 - `ingredients`
 - `vibe`
 
+Plan rows use `PlanLine` in `src/lib/plan.ts`: `{ meal: Meal; quantity: number }`.
+
 ## Derived Logic
 
 Pure helper logic lives in `src/lib/plan.ts`:
 
 - `filterMeals(meals, diet, maxPrepMinutes)`
-- `summarizePlan(meals)`
+- `summarizePlan(planLines)`
 - `formatCurrency(value)`
 
 Prefer adding tests around these helpers before adding complex UI tests.

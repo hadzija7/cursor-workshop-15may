@@ -1,5 +1,11 @@
 import type { DietTag, Meal } from "@/lib/meals";
 
+/** One row in the lunch plan; quantity defaults to 1 until the multi-qty workshop extension. */
+export type PlanLine = {
+  meal: Meal;
+  quantity: number;
+};
+
 export type PlanSummary = {
   totalCost: number;
   totalServings: number;
@@ -14,15 +20,24 @@ export function formatCurrency(value: number) {
   }).format(value);
 }
 
-export function summarizePlan(meals: Meal[]): PlanSummary {
+export function summarizePlan(lines: PlanLine[]): PlanSummary {
   return {
-    totalCost: meals.reduce(
-      (sum, meal) => sum + meal.costPerServing * meal.servings,
+    totalCost: lines.reduce(
+      (sum, line) =>
+        sum +
+        line.meal.costPerServing * line.meal.servings * line.quantity,
       0,
     ),
-    totalServings: meals.reduce((sum, meal) => sum + meal.servings, 0),
+    totalServings: lines.reduce(
+      (sum, line) => sum + line.meal.servings * line.quantity,
+      0,
+    ),
     ingredients: Array.from(
-      new Set(meals.flatMap((meal) => meal.ingredients)),
+      new Set(
+        lines.flatMap((line) =>
+          Array.from({ length: line.quantity }, () => line.meal.ingredients).flat(),
+        ),
+      ),
     ).sort(),
   };
 }
