@@ -13,8 +13,8 @@ Cursor Cafe Planner helps a coworking group choose a shared lunch. It is intenti
 
 - Display a set of meal options with name, description, diet tags, prep time, servings, estimated cost, ingredients, and a short vibe.
 - Allow filtering by **maximum prep time** and a **subset of diet tags** in the baseline UI: All, Vegetarian, and Vegan only. Meal records may still include **gluten-free** and **high-protein** tags; Phase 2 re-exposes those as filter choices.
-- Allow adding meals to a lunch plan as distinct rows with a **quantity** (baseline app uses quantity `1` only).
-- Prevent adding the same meal twice as separate rows until the quantity workshop extension is implemented; already-added meals show a disabled green **Added** control on the card.
+- Allow adding meals to a lunch plan as distinct rows with a **quantity** (minimum **1** per row). Each dish appears **at most once** as a row; repeat orders bump `quantity`, not a second row.
+- After add, meal cards expose **increment / decrement**: decrement at quantity `1` **removes** the row from the plan. **Remove** per line appears in the live plan panel for an explicit dismiss.
 - Show selected meals (with quantity and servings metadata), **total servings**, and a starter shopping list. **Total estimated cost** is intentionally omitted from the summary panel in baseline; Phase 2 brings it back (`summarizePlan` still computes `totalCost` for tests and future UI).
 - Allow clearing the selected plan.
 
@@ -24,15 +24,16 @@ The filter strip uses a deliberately plain layout so Phase 2 can demonstrate a v
 
 ## Baseline vs Workshop Extension
 
-**Baseline (shipping demo):**
+**Shipping planner behavior:**
 
-- Each meal appears at most once in the plan with quantity `1`.
-- Totals use `summarizePlan(planLines)` where each line is `{ meal, quantity }`.
+- Each meal appears at most once in the plan with `quantity >= 1` while listed; increments stack on that row only.
+- UI: steppers on meal cards plus matching controls and **Remove** in the sticky plan summary.
+- Totals and ingredient aggregation use `summarizePlan(planLines)` for `{ meal, quantity }`; cost and servings scale with quantity.
 
-**Workshop extension:**
+**Possible future workshop tweaks (still Phase 2 in other areas):**
 
-- Allow ordering **multiple quantities** of the same meal (for example increment/decrement controls on the card or in the summary list).
-- Totals and ingredient aggregation must scale with line quantity (`summarizePlan` already multiplies cost and servings by `quantity`; extend UI and state updates accordingly).
+- Extra diet filters (**gluten-free**, **high-protein**, etc.).
+- Visible **total cost** in the summary panel (computed today via `summarizePlan`, not surfaced in UI).
 
 ## Data Model
 

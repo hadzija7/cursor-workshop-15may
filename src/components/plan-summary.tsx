@@ -3,9 +3,18 @@ import { summarizePlan, type PlanLine } from "@/lib/plan";
 type PlanSummaryProps = {
   planLines: PlanLine[];
   onClear: () => void;
+  onIncrementQuantity: (mealId: string) => void;
+  onDecrementQuantity: (mealId: string) => void;
+  onRemoveLine: (mealId: string) => void;
 };
 
-export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
+export function PlanSummary({
+  planLines,
+  onClear,
+  onIncrementQuantity,
+  onDecrementQuantity,
+  onRemoveLine,
+}: PlanSummaryProps) {
   const summary = summarizePlan(planLines);
 
   return (
@@ -24,26 +33,70 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
 
       {planLines.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-white/20 p-5 text-sm leading-6 text-stone-300">
-          Add meals from the cards to build a shared coworking lunch plan. Each
-          dish starts at quantity 1; a later workshop step adds repeat orders
-          of the same meal.
+          Add meals from the cards to build a shared coworking lunch plan. Use
+          the plus and minus controls to order more than one batch of the same
+          dish, or remove a line anytime.
         </div>
       ) : (
         <>
           <ul className="mt-6 space-y-3">
-            {planLines.map((line) => (
-              <li
-                key={line.meal.id}
-                className="rounded-2xl bg-white/10 p-3 text-sm"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span>{line.meal.name}</span>
-                  <span className="text-stone-300">
-                    ×{line.quantity} · {line.meal.servings} serves each
-                  </span>
-                </div>
-              </li>
-            ))}
+            {planLines.map((line) => {
+              const lineServings = line.quantity * line.meal.servings;
+              return (
+                <li
+                  key={line.meal.id}
+                  className="rounded-2xl bg-white/10 p-3 text-sm"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <span className="font-medium">{line.meal.name}</span>
+                      <p className="mt-1 text-xs text-stone-300">
+                        ×{line.quantity} · {line.meal.servings} serves per batch ·{" "}
+                        {lineServings} servings total for this dish
+                      </p>
+                    </div>
+                    <div className="flex flex-shrink-0 flex-wrap items-center gap-2">
+                      <div
+                        className="flex items-center rounded-full border border-white/25 bg-black/15 p-0.5"
+                        role="group"
+                        aria-label={`Quantity for ${line.meal.name}`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => onDecrementQuantity(line.meal.id)}
+                          aria-label={
+                            line.quantity <= 1
+                              ? `Remove ${line.meal.name} from plan`
+                              : `Decrease quantity of ${line.meal.name}`
+                          }
+                          className="flex h-8 min-w-8 items-center justify-center rounded-full text-lg font-semibold text-white transition hover:bg-white/10"
+                        >
+                          −
+                        </button>
+                        <span className="min-w-8 px-2 text-center text-sm font-semibold tabular-nums">
+                          {line.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onIncrementQuantity(line.meal.id)}
+                          aria-label={`Increase quantity of ${line.meal.name}`}
+                          className="flex h-8 min-w-8 items-center justify-center rounded-full text-lg font-semibold text-white transition hover:bg-white/10"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onRemoveLine(line.meal.id)}
+                        className="rounded-full px-3 py-1 text-xs font-semibold text-orange-200 underline-offset-4 hover:text-white hover:underline"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="mt-6 rounded-2xl bg-orange-300 p-4 text-stone-950">
