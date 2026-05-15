@@ -41,3 +41,11 @@ This repo is a 15-minute Cursor SDLC workshop demo. Keep changes easy to explain
 - Prefer pure helpers in `src/lib/plan.ts` for calculations that need tests.
 - Keep UI changes accessible enough for a live demo: labels, buttons, readable contrast, and obvious states.
 - Update `TODO.md`, `docs/workshop-script.md`, or `specs/meal-planner.md` when a workshop step changes.
+
+## Cursor Cloud specific instructions
+
+- **No external services needed.** This is a zero-infrastructure frontend-only Next.js app. All data is hardcoded seed data; no database, Docker, or environment variables are required.
+- **Dev server:** `pnpm dev` starts Next.js on `http://localhost:3000`. The server supports hot reload for all `src/` changes.
+- **Commands reference:** See the Commands table above — `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm dev` all work out of the box after `pnpm install`.
+- **Build script warnings:** `pnpm install` may warn about ignored build scripts for `esbuild` and `sqlite3`. These are non-blocking; `pnpm-workspace.yaml` already handles `sharp` and `unrs-resolver`, and the remaining warnings do not affect dev/test/build.
+- **`pnpm suggest`** requires a `CURSOR_API_KEY` environment variable and is optional — it is not needed for the app itself.
