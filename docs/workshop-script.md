@@ -74,9 +74,13 @@ Polish the cafe planner Phase 2 gaps:
 - Testing: write test for these new features
 ```
 
+### Cloud agents with UI recordings
+
+- move to cloud, record the demo of the UI changes and add them to PR as artifacts
+
 ### Debugging
 
-### Cloud agents with UI recordings
+- explain how debug mode works
 
 ### Cursor SDK Automation
 
