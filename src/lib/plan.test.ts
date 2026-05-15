@@ -37,6 +37,18 @@ describe("filterMeals", () => {
   it("keeps all diet tags when all is selected", () => {
     expect(filterMeals(testMeals, "all", 45)).toHaveLength(2);
   });
+
+  it("filters by the gluten-free diet tag", () => {
+    expect(filterMeals(testMeals, "gluten-free", 45)).toEqual([testMeals[0]]);
+  });
+
+  it("filters by the high-protein diet tag", () => {
+    expect(filterMeals(testMeals, "high-protein", 45)).toEqual([testMeals[1]]);
+  });
+
+  it("returns no meals when the diet tag is unmatched within the prep window", () => {
+    expect(filterMeals(testMeals, "high-protein", 20)).toEqual([]);
+  });
 });
 
 const testLines: PlanLine[] = [
@@ -67,5 +79,9 @@ describe("summarizePlan", () => {
 describe("formatCurrency", () => {
   it("formats Euro values without cents for workshop readability", () => {
     expect(formatCurrency(62)).toBe("€62");
+  });
+
+  it("renders the plan summary's total cost for the summary panel", () => {
+    expect(formatCurrency(summarizePlan(testLines).totalCost)).toBe("€62");
   });
 });
