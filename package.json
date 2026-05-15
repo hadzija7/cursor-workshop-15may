@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "demo:video": "CI=1 playwright test e2e/ui-demo-video.spec.ts",
     "suggest": "tsx scripts/suggest-next-work.ts"
   },
   "dependencies": {
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@cursor/sdk": "^1.0.13",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
