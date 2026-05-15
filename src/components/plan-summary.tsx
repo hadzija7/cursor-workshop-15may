@@ -20,6 +20,7 @@ export function PlanSummary({
   onRemoveMeal,
 }: PlanSummaryProps) {
   const summary = summarizePlan(planLines);
+  const totalPicks = planLines.reduce((sum, line) => sum + line.quantity, 0);
 
   return (
     <aside className="sticky top-6 rounded-[2rem] border border-stone-200 bg-stone-950 p-6 text-white shadow-2xl shadow-stone-300/40">
@@ -31,7 +32,7 @@ export function PlanSummary({
           <h2 className="mt-2 text-2xl font-semibold">Friday lunch</h2>
         </div>
         <span className="rounded-full bg-white/10 px-3 py-1 text-sm">
-          {planLines.length} picks
+          {totalPicks} picks
         </span>
       </div>
 
