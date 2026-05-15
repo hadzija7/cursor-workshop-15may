@@ -57,6 +57,15 @@ Prompt:
 Implement multiple quantities per meal in the cafe planner. Baseline state stores each dish once at quantity 1. Add UI to increase/decrease quantity (minimum 1) or remove the line, keep totals correct via summarizePlan(planLines).
 ```
 
+### Cloud agents with UI recordings
+
+- move to cloud, record the demo of the UI changes and add them to PR as artifacts
+
+### Code review and docs
+
+- Cursor Bugbot
+- Cursor Automations
+
 ### Add rules
 
 - rule for updating [features.md](http://features.md) file when a new feature is added
@@ -73,10 +82,6 @@ Polish the cafe planner Phase 2 gaps:
 - Filter UX: replace the placeholder layout with a clearer, more polished filter section (hierarchy, spacing, and prep-time affordance).
 - Testing: write test for these new features
 ```
-
-### Cloud agents with UI recordings
-
-- move to cloud, record the demo of the UI changes and add them to PR as artifacts
 
 ### Debugging
 
@@ -99,11 +104,6 @@ Explain:
 - The script uses `@cursor/sdk`.
 - It asks a local Cursor agent to inspect `TODO.md`.
 - This pattern can support CI checks, issue triage, release notes, or PR review.
-
-### Code review and docs
-
-- Cursor Bugbot
-- Cursor Automations
 
 ## Closing Line
 
