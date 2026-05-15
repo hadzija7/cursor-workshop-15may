@@ -1,4 +1,4 @@
-# Cursor Café Planner
+# Cursor Cafe Planner
 
 A small Next.js demo repo for a 15-minute workshop on Cursor across the SDLC.
 

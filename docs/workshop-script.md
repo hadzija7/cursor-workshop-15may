@@ -20,108 +20,65 @@ Show Cursor as an SDLC partner, not only a code generator. The audience should s
 
 ## Minute-by-Minute Flow
 
-### 0:00-2:00 Understand and Plan
+### Understand the product (Ask mode)
 
-Say: "We are going to improve a tiny lunch-planning product. First, I want Cursor to understand the repo before changing it."
-
-Prompt:
+General info:
 
 ```text
-Inspect this repo and explain what the product does. Then make a short plan for improving the café planner in a way that is visible in the UI and safe to finish in 15 minutes.
+Inspect this repo and explain what the product does in 2 sentences.
 ```
 
-Show:
+- Repo-aware explanation
 
-- Repo-aware explanation.
-- Plan mode for scoped implementation.
-- How `TODO.md` and `specs/meal-planner.md` give the agent product context.
-
-### 2:00-5:00 Implement a Visible Feature
-
-Prompt:
+Canvas:
 
 ```text
-Improve the planner UI so the filters and lunch summary are easier for workshop attendees to understand. Keep the changes small and explain what files you plan to edit before editing.
+create a canvas for showing me product architecture /canvas. check specs/meal-planner.md for context.
 ```
 
-Show:
+- UI overview of the product
+- `specs/meal-planner.md` give the agent product context.
 
-- Multi-file edits across `src/components/`.
-- Context-aware component reuse.
-- Running `pnpm lint` or checking the browser after the change.
+Plan:
 
-Fallback if time is tight:
+- using plan mode (TODO list)
 
-- Ask Cursor to only add one summary metric.
-- Skip visual polish and move to the quantity task.
+### Implement feature: Add multiple plan items
 
-### 5:00-8:00 Multi-Quantity Workshop Task
+Baseline behavior: Only 1 meal of a kind can be added
 
-Establish baseline behavior:
-
-1. Add a meal once and note the green **Added** button and quantity `×1` in the summary.
-2. Explain that coworkers often want two trays of the same dish.
+Improvement: One meal item can be added multiple times
 
 Switch to Agent mode (or Debug mode if something regresses).
 
 Prompt:
 
 ```text
-Implement multiple quantities per meal in the café planner. Baseline state stores each dish once at quantity 1. Add UI to increase/decrease quantity (minimum 1) or remove the line, keep totals correct via summarizePlan(planLines), and update specs/meal-planner.md if behavior changes.
+Implement multiple quantities per meal in the cafe planner. Baseline state stores each dish once at quantity 1. Add UI to increase/decrease quantity (minimum 1) or remove the line, keep totals correct via summarizePlan(planLines).
 ```
 
-Show:
+### Add rules
 
-- Reading `PlanLine` and `summarizePlan` in `src/lib/plan.ts`.
-- Wiring controls without duplicate rows for the same `meal.id`.
-- Verification in the browser and with `pnpm test`.
+- rule for updating [features.md](http://features.md) file when a new feature is added
+- rule for updating todo list, ones the item is complete
 
-Fallback if time is tight:
+### Implement Multiple changes with Multitask
 
-- Implement only increment-from-summary or only one extra control.
-- Mention tests as homework.
-
-### 8:00-11:00 Multitask
-
-Say: "Now the work splits naturally: tests, review, and docs do not need to happen serially."
-
-Multitask prompt:
+Prompt (Phase 2 backlog: diet filter options, summary cost, filter polish):
 
 ```text
-Run three parallel tasks: one agent should add focused tests for meal-plan logic (including quantity scaling), one should review the UI/accessibility and suggest small improvements, and one should update the workshop notes to reflect the multi-quantity feature. Keep changes small and report conflicts.
+Polish the cafe planner Phase 2 gaps: 
+- Diet filters: expose Gluten-free and High-protein alongside the existing options (chips or buttons work well).
+- Summary: show total estimated cost using formatCurrency(summary.totalCost) next to servings.
+- Filter UX: replace the placeholder layout with a clearer, more polished filter section (hierarchy, spacing, and prep-time affordance).
+- Testing: write test for these new features
 ```
 
-Show:
+### Debugging
 
-- Parallel execution for independent SDLC workstreams.
-- Reviewing outputs before merging.
-- Choosing small, useful changes over accepting everything.
+### Cloud agents with UI recordings
 
-Fallback if time is tight:
-
-- Use the prompt as a conceptual demo and only merge the test task.
-
-### 11:00-13:00 Quality Gate
-
-Prompt:
-
-```text
-Add focused tests for the pure meal-plan helpers. Cover filtering, total cost, total servings, ingredient aggregation, and quantity scaling on plan lines.
-```
-
-Run:
-
-```bash
-pnpm test
-pnpm lint
-```
-
-Show:
-
-- The difference between UI state and pure helper tests.
-- How Cursor can add narrow tests without overbuilding.
-
-### 13:00-15:00 Cursor SDK Automation
+### Cursor SDK Automation
 
 Open `scripts/suggest-next-work.ts`.
 
@@ -138,6 +95,11 @@ Explain:
 - The script uses `@cursor/sdk`.
 - It asks a local Cursor agent to inspect `TODO.md`.
 - This pattern can support CI checks, issue triage, release notes, or PR review.
+
+### Code review and docs
+
+- Cursor Bugbot
+- Cursor Automations
 
 ## Closing Line
 

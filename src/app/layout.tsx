@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cursor Café Planner",
+  title: "Cursor Cafe Planner",
   description: "A tiny Next.js app for a Cursor SDLC workshop demo.",
 };
 

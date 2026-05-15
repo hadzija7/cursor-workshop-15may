@@ -34,7 +34,7 @@ export function CafePlanner() {
                 Cursor SDLC workshop
               </p>
               <h1 className="mt-5 max-w-3xl text-5xl font-semibold tracking-tight sm:text-6xl">
-                Cursor Café Planner
+                Cursor Cafe Planner
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-stone-300">
                 A tiny Next.js product for demonstrating the full software

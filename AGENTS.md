@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Cursor Café Planner Agent Guide
+# Cursor Cafe Planner Agent Guide
 
 ## Purpose
 
@@ -15,7 +15,7 @@ This repo is a 15-minute Cursor SDLC workshop demo. Keep changes easy to explain
 | Path | Purpose |
 | --- | --- |
 | `src/app/page.tsx` | Next.js entrypoint for the demo UI. |
-| `src/components/` | UI components for the café planner. |
+| `src/components/` | UI components for the cafe planner. |
 | `src/lib/meals.ts` | Seed data and meal domain types. |
 | `src/lib/plan.ts` | Pure derived-data helpers for filtering and summaries. |
 | `docs/workshop-script.md` | Presenter script and prompts to paste into Cursor. |
