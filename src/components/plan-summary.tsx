@@ -1,4 +1,4 @@
-import { summarizePlan, type PlanLine } from "@/lib/plan";
+import { formatCurrency, summarizePlan, type PlanLine } from "@/lib/plan";
 
 type PlanSummaryProps = {
   planLines: PlanLine[];
@@ -46,11 +46,23 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
             ))}
           </ul>
 
-          <div className="mt-6 rounded-2xl bg-orange-300 p-4 text-stone-950">
-            <p className="text-xs uppercase tracking-wide text-stone-700">
-              Servings
-            </p>
-            <p className="mt-1 text-2xl font-semibold">{summary.totalServings}</p>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl bg-orange-300 p-4 text-stone-950">
+              <p className="text-xs uppercase tracking-wide text-stone-700">
+                Servings
+              </p>
+              <p className="mt-1 text-2xl font-semibold">
+                {summary.totalServings}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/10 p-4 text-white">
+              <p className="text-xs uppercase tracking-wide text-stone-300">
+                Total cost
+              </p>
+              <p className="mt-1 text-2xl font-semibold">
+                {formatCurrency(summary.totalCost)}
+              </p>
+            </div>
           </div>
 
           <div className="mt-6">
