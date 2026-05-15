@@ -1,13 +1,28 @@
 import { type Meal } from "@/lib/meals";
+import type { PlanLine } from "@/lib/plan";
 import { MealCard } from "@/components/meal-card";
 
 type MealGridProps = {
   meals: Meal[];
-  selectedMealIds: string[];
+  planLines: PlanLine[];
   onAddMeal: (meal: Meal) => void;
+  onIncrementMeal: (meal: Meal) => void;
+  onDecrementMeal: (meal: Meal) => void;
+  onRemoveMeal: (meal: Meal) => void;
 };
 
-export function MealGrid({ meals, selectedMealIds, onAddMeal }: MealGridProps) {
+function quantityForMeal(lines: PlanLine[], mealId: string): number {
+  return lines.find((l) => l.meal.id === mealId)?.quantity ?? 0;
+}
+
+export function MealGrid({
+  meals,
+  planLines,
+  onAddMeal,
+  onIncrementMeal,
+  onDecrementMeal,
+  onRemoveMeal,
+}: MealGridProps) {
   if (meals.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-orange-200 bg-orange-50/60 p-10 text-center">
@@ -31,8 +46,11 @@ export function MealGrid({ meals, selectedMealIds, onAddMeal }: MealGridProps) {
         <MealCard
           key={meal.id}
           meal={meal}
-          isSelected={selectedMealIds.includes(meal.id)}
+          planQuantity={quantityForMeal(planLines, meal.id)}
           onAdd={onAddMeal}
+          onIncrement={onIncrementMeal}
+          onDecrement={onDecrementMeal}
+          onRemove={onRemoveMeal}
         />
       ))}
     </section>

@@ -3,11 +3,26 @@ import { formatCurrency } from "@/lib/plan";
 
 type MealCardProps = {
   meal: Meal;
-  isSelected: boolean;
+  planQuantity: number;
   onAdd: (meal: Meal) => void;
+  onIncrement: (meal: Meal) => void;
+  onDecrement: (meal: Meal) => void;
+  onRemove: (meal: Meal) => void;
 };
 
-export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
+const qtyBtnClass =
+  "inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-stone-200 bg-white text-lg font-semibold text-stone-950 transition hover:bg-stone-50 disabled:cursor-not-allowed disabled:opacity-40";
+
+export function MealCard({
+  meal,
+  planQuantity,
+  onAdd,
+  onIncrement,
+  onDecrement,
+  onRemove,
+}: MealCardProps) {
+  const inPlan = planQuantity >= 1;
+
   return (
     <article className="group flex h-full flex-col rounded-3xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-100">
       <div className="flex items-start justify-between gap-4">
@@ -40,7 +55,7 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-stone-100 pt-5">
+      <div className="mt-5 flex flex-col gap-3 border-t border-stone-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-xs uppercase tracking-wide text-stone-500">
             For {meal.servings}
@@ -49,19 +64,53 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
             {formatCurrency(meal.costPerServing * meal.servings)}
           </p>
         </div>
-        <button
-          type="button"
-          disabled={isSelected}
-          aria-label={isSelected ? `${meal.name} added to plan` : undefined}
-          onClick={() => onAdd(meal)}
-          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-            isSelected
-              ? "cursor-default bg-emerald-600 text-white"
-              : "bg-stone-950 text-white hover:bg-stone-800"
-          }`}
-        >
-          {isSelected ? "Added" : "Add to plan"}
-        </button>
+        {inPlan ? (
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <div
+              className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-stone-50 p-1"
+              role="group"
+              aria-label={`Quantity in plan for ${meal.name}`}
+            >
+              <button
+                type="button"
+                className={qtyBtnClass}
+                disabled={planQuantity <= 1}
+                aria-label={`Decrease quantity of ${meal.name}`}
+                onClick={() => onDecrement(meal)}
+              >
+                −
+              </button>
+              <span className="min-w-8 px-1 text-center text-sm font-semibold tabular-nums">
+                {planQuantity}
+              </span>
+              <button
+                type="button"
+                className={qtyBtnClass}
+                aria-label={`Increase quantity of ${meal.name}`}
+                onClick={() => onIncrement(meal)}
+              >
+                +
+              </button>
+            </div>
+            <button
+              type="button"
+              className="rounded-full px-3 py-2 text-sm font-semibold text-stone-600 underline-offset-2 hover:text-stone-950 hover:underline"
+              aria-label={`Remove ${meal.name} from plan`}
+              onClick={() => onRemove(meal)}
+            >
+              Remove
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            aria-label={`Add ${meal.name} to plan`}
+            onClick={() => onAdd(meal)}
+            className="rounded-full bg-stone-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-stone-800"
+          >
+            Add to plan
+          </button>
+        )}
       </div>
     </article>
   );

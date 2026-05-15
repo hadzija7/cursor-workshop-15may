@@ -1,11 +1,24 @@
 import { summarizePlan, type PlanLine } from "@/lib/plan";
+import type { Meal } from "@/lib/meals";
 
 type PlanSummaryProps = {
   planLines: PlanLine[];
   onClear: () => void;
+  onIncrementMeal: (meal: Meal) => void;
+  onDecrementMeal: (meal: Meal) => void;
+  onRemoveMeal: (meal: Meal) => void;
 };
 
-export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
+const qtyBtnClass =
+  "inline-flex h-8 min-w-8 items-center justify-center rounded-full border border-white/30 text-base font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-35";
+
+export function PlanSummary({
+  planLines,
+  onClear,
+  onIncrementMeal,
+  onDecrementMeal,
+  onRemoveMeal,
+}: PlanSummaryProps) {
   const summary = summarizePlan(planLines);
 
   return (
@@ -24,9 +37,9 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
 
       {planLines.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-white/20 p-5 text-sm leading-6 text-stone-300">
-          Add meals from the cards to build a shared coworking lunch plan. Each
-          dish starts at quantity 1; a later workshop step adds repeat orders
-          of the same meal.
+          Add meals from the cards to build a shared coworking lunch plan. Use
+          plus and minus on a line to adjust how many of each dish to make (at
+          least one while it stays on the plan), or remove a line entirely.
         </div>
       ) : (
         <>
@@ -36,12 +49,50 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
                 key={line.meal.id}
                 className="rounded-2xl bg-white/10 p-3 text-sm"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <span>{line.meal.name}</span>
-                  <span className="text-stone-300">
-                    ×{line.quantity} · {line.meal.servings} serves each
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="font-medium">{line.meal.name}</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div
+                      className="inline-flex items-center gap-0.5 rounded-full border border-white/20 bg-white/5 p-0.5"
+                      role="group"
+                      aria-label={`Quantity for ${line.meal.name}`}
+                    >
+                      <button
+                        type="button"
+                        className={qtyBtnClass}
+                        disabled={line.quantity <= 1}
+                        aria-label={`Decrease quantity of ${line.meal.name}`}
+                        onClick={() => onDecrementMeal(line.meal)}
+                      >
+                        −
+                      </button>
+                      <span className="min-w-7 px-1 text-center text-sm font-semibold tabular-nums">
+                        {line.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        className={qtyBtnClass}
+                        aria-label={`Increase quantity of ${line.meal.name}`}
+                        onClick={() => onIncrementMeal(line.meal)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      className="rounded-full px-2 py-1 text-xs font-semibold text-orange-200 underline-offset-2 hover:underline"
+                      aria-label={`Remove ${line.meal.name} from plan`}
+                      onClick={() => onRemoveMeal(line.meal)}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
+                <p className="mt-2 text-xs text-stone-400">
+                  ×{line.quantity} batch
+                  {line.quantity === 1 ? "" : "es"} ·{" "}
+                  {line.meal.servings * line.quantity} total servings
+                </p>
               </li>
             ))}
           </ul>

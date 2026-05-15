@@ -24,6 +24,30 @@ export function CafePlanner() {
     });
   }
 
+  function incrementMealInPlan(meal: Meal) {
+    setPlanLines((lines) =>
+      lines.map((line) =>
+        line.meal.id === meal.id
+          ? { ...line, quantity: line.quantity + 1 }
+          : line,
+      ),
+    );
+  }
+
+  function decrementMealInPlan(meal: Meal) {
+    setPlanLines((lines) =>
+      lines.map((line) =>
+        line.meal.id === meal.id && line.quantity > 1
+          ? { ...line, quantity: line.quantity - 1 }
+          : line,
+      ),
+    );
+  }
+
+  function removeMealFromPlan(meal: Meal) {
+    setPlanLines((lines) => lines.filter((line) => line.meal.id !== meal.id));
+  }
+
   return (
     <main className="min-h-screen bg-[#fff8ed] text-stone-950">
       <section className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10">
@@ -69,14 +93,20 @@ export function CafePlanner() {
             />
             <MealGrid
               meals={filteredMeals}
-              selectedMealIds={planLines.map((line) => line.meal.id)}
+              planLines={planLines}
               onAddMeal={addMealToPlan}
+              onIncrementMeal={incrementMealInPlan}
+              onDecrementMeal={decrementMealInPlan}
+              onRemoveMeal={removeMealFromPlan}
             />
           </div>
 
           <PlanSummary
             planLines={planLines}
             onClear={() => setPlanLines([])}
+            onIncrementMeal={incrementMealInPlan}
+            onDecrementMeal={decrementMealInPlan}
+            onRemoveMeal={removeMealFromPlan}
           />
         </div>
       </section>
