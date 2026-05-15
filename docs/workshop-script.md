@@ -45,11 +45,8 @@ Plan:
 
 ### Implement feature: Add multiple plan items
 
-Baseline behavior: Only 1 meal of a kind can be added
-
-Improvement: One meal item can be added multiple times
-
-Switch to Agent mode (or Debug mode if something regresses).
+- Baseline behavior: Only 1 meal of a kind can be added
+- Improvement: One meal item can be added multiple times
 
 Prompt:
 
