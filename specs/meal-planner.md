@@ -12,15 +12,18 @@ Cursor Cafe Planner helps a coworking group choose a shared lunch. It is intenti
 ## Core Behavior
 
 - Display a set of meal options with name, description, diet tags, prep time, servings, estimated cost, ingredients, and a short vibe.
-- Allow filtering by **maximum prep time** and a **subset of diet tags** in the baseline UI: All, Vegetarian, and Vegan only. Meal records may still include **gluten-free** and **high-protein** tags; Phase 2 re-exposes those as filter choices.
+- Allow filtering by **maximum prep time** and any of the supported diet tags in the UI: All, Vegetarian, Vegan, Gluten-free, and High-protein. The diet control is rendered as a chip group so each option is one click away.
 - Allow adding meals to a lunch plan as distinct rows with a **quantity** (baseline app uses quantity `1` only).
 - Prevent adding the same meal twice as separate rows until the quantity workshop extension is implemented; already-added meals show a disabled green **Added** control on the card.
-- Show selected meals (with quantity and servings metadata), **total servings**, and a starter shopping list. **Total estimated cost** is intentionally omitted from the summary panel in baseline; Phase 2 brings it back (`summarizePlan` still computes `totalCost` for tests and future UI).
+- Show selected meals (with quantity and servings metadata), **total servings**, **total estimated cost** (rendered with `formatCurrency(summary.totalCost)`), and a starter shopping list.
 - Allow clearing the selected plan.
 
-## Intentionally rough baseline UI
+## Filter Section
 
-The filter strip uses a deliberately plain layout so Phase 2 can demonstrate a visible redesign without changing domain logic first.
+The filter section is a single rounded card that groups two controls:
+
+- A diet chip group (All, Vegetarian, Vegan, Gluten-free, High-protein) using `aria-pressed` for the selected chip.
+- A prep-time range from 15 to 45 minutes (5-minute step), with the current value shown alongside the slider and `15 min` / `45 min` anchors below it.
 
 ## Baseline vs Workshop Extension
 

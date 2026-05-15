@@ -14,19 +14,11 @@ Suggested prompt:
 Inspect this repo and explain what the product does. Then make a short plan for improving the cafe planner in a way that is visible in the UI and safe to finish in 15 minutes.
 ```
 
-## Phase 2: Restore Diet Filters, Summary Cost, and Filter Polish
+## Phase 2: Restore Diet Filters, Summary Cost, and Filter Polish — shipped
 
-Baseline ships with a **rough** filter panel (dropdown + range) and only **All / Vegetarian / Vegan** in the UI. Gluten-free and high-protein stay on meal data but are not filter choices yet. The summary shows **servings only**; total cost is still computed in `summarizePlan` but hidden.
+The filter card now exposes **All / Vegetarian / Vegan / Gluten-free / High-protein** as a chip group, the plan summary renders **total estimated cost** via `formatCurrency(summary.totalCost)` next to total servings, and the filter section uses a single rounded card with a prep-time slider, current-value readout, and `15 min` / `45 min` anchors.
 
-- **Diet filters:** expose **Gluten-free** and **High-protein** alongside the existing options (chips or buttons work well).
-- **Summary:** show **total estimated cost** using `formatCurrency(summary.totalCost)` next to servings.
-- **Filter UX:** replace the placeholder layout with a clearer, more polished filter section (hierarchy, spacing, and prep-time affordance).
-
-Suggested prompt:
-
-```text
-Polish the cafe planner Phase 2 gaps: (1) add Gluten-free and High-protein back to the diet filter control, (2) show total estimated cost in the plan summary again with formatCurrency, (3) redesign the filter area for clarity and a nicer layout. Keep edits scoped to src/components/ plus any spec notes. Explain which files you will touch before editing.
-```
+If you want to demo the rough baseline again, revert `src/components/diet-filter.tsx` and the summary cost grid in `src/components/plan-summary.tsx`.
 
 ## Phase 3: Multiple Quantities per Meal
 
