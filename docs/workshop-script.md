@@ -68,20 +68,26 @@ Implement multiple quantities per meal in the cafe planner. Baseline state store
 
 ### Add rules
 
-- rule for updating [features.md](http://features.md) file when a new feature is added
+```text
+let's add rules for:
+- rule for updating features.md file when a new feature is added
 - rule for updating todo list, ones the item is complete
+/create-rule
+```
 
 ### Implement Multiple changes with Multitask
 
 Prompt (Phase 2 backlog: diet filter options, summary cost, filter polish):
 
 ```text
-Polish the cafe planner Phase 2 gaps: 
+Let's implement following changes: 
 - Diet filters: expose Gluten-free and High-protein alongside the existing options (chips or buttons work well).
 - Summary: show total estimated cost using formatCurrency(summary.totalCost) next to servings.
 - Filter UX: replace the placeholder layout with a clearer, more polished filter section (hierarchy, spacing, and prep-time affordance).
 - Testing: write test for these new features
 ```
+
+do the same using orchestrate
 
 ### Debugging
 
