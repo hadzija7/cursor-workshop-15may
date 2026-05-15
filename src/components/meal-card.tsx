@@ -3,11 +3,20 @@ import { formatCurrency } from "@/lib/plan";
 
 type MealCardProps = {
   meal: Meal;
-  isSelected: boolean;
+  quantity: number;
   onAdd: (meal: Meal) => void;
+  onIncrement: () => void;
+  onDecrement: () => void;
 };
 
-export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
+export function MealCard({
+  meal,
+  quantity,
+  onAdd,
+  onIncrement,
+  onDecrement,
+}: MealCardProps) {
+  const inPlan = quantity >= 1;
   return (
     <article className="group flex h-full flex-col rounded-3xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-100">
       <div className="flex items-start justify-between gap-4">
@@ -40,7 +49,7 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-stone-100 pt-5">
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 pt-5">
         <div>
           <p className="text-xs uppercase tracking-wide text-stone-500">
             For {meal.servings}
@@ -49,19 +58,53 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
             {formatCurrency(meal.costPerServing * meal.servings)}
           </p>
         </div>
-        <button
-          type="button"
-          disabled={isSelected}
-          aria-label={isSelected ? `${meal.name} added to plan` : undefined}
-          onClick={() => onAdd(meal)}
-          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-            isSelected
-              ? "cursor-default bg-emerald-600 text-white"
-              : "bg-stone-950 text-white hover:bg-stone-800"
-          }`}
-        >
-          {isSelected ? "Added" : "Add to plan"}
-        </button>
+        {inPlan ? (
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <div
+              className="flex items-center rounded-full border border-stone-200 bg-stone-50 p-0.5"
+              role="group"
+              aria-label={`Quantity for ${meal.name}`}
+            >
+              <button
+                type="button"
+                onClick={onDecrement}
+                aria-label={
+                  quantity <= 1
+                    ? `Remove ${meal.name} from plan`
+                    : `Decrease quantity of ${meal.name}`
+                }
+                className="flex h-9 min-w-[2.25rem] items-center justify-center rounded-full text-lg font-semibold text-stone-800 transition hover:bg-white"
+              >
+                −
+              </button>
+              <span
+                className="min-w-[2rem] px-2 text-center text-sm font-semibold tabular-nums text-stone-950"
+                aria-live="polite"
+              >
+                {quantity}
+              </span>
+              <button
+                type="button"
+                onClick={onIncrement}
+                aria-label={`Increase quantity of ${meal.name}`}
+                className="flex h-9 min-w-[2.25rem] items-center justify-center rounded-full text-lg font-semibold text-stone-800 transition hover:bg-white"
+              >
+                +
+              </button>
+            </div>
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+              In plan
+            </span>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onAdd(meal)}
+            className="rounded-full bg-stone-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-stone-800"
+          >
+            Add to plan
+          </button>
+        )}
       </div>
     </article>
   );
