@@ -2,10 +2,17 @@ import { summarizePlan, type PlanLine } from "@/lib/plan";
 
 type PlanSummaryProps = {
   planLines: PlanLine[];
+  onAdjustQuantity: (mealId: string, delta: number) => void;
+  onRemoveLine: (mealId: string) => void;
   onClear: () => void;
 };
 
-export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
+export function PlanSummary({
+  planLines,
+  onAdjustQuantity,
+  onRemoveLine,
+  onClear,
+}: PlanSummaryProps) {
   const summary = summarizePlan(planLines);
 
   return (
@@ -24,9 +31,9 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
 
       {planLines.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-white/20 p-5 text-sm leading-6 text-stone-300">
-          Add meals from the cards to build a shared coworking lunch plan. Each
-          dish starts at quantity 1; a later workshop step adds repeat orders
-          of the same meal.
+          Add meals from the cards to build a shared coworking lunch plan. Use
+          +/− here or &ldquo;Add another&rdquo; on a card for repeat orders
+          (minimum one per line).
         </div>
       ) : (
         <>
@@ -36,11 +43,46 @@ export function PlanSummary({ planLines, onClear }: PlanSummaryProps) {
                 key={line.meal.id}
                 className="rounded-2xl bg-white/10 p-3 text-sm"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <span>{line.meal.name}</span>
-                  <span className="text-stone-300">
-                    ×{line.quantity} · {line.meal.servings} serves each
-                  </span>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="min-w-0 font-medium">{line.meal.name}</span>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="text-stone-400">
+                      {line.meal.servings} serves each batch
+                    </span>
+                    <div className="flex items-center gap-1 rounded-full bg-black/25 p-0.5">
+                      <button
+                        type="button"
+                        aria-label={`Decrease quantity of ${line.meal.name}`}
+                        onClick={() => onAdjustQuantity(line.meal.id, -1)}
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-semibold leading-none text-white transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-40"
+                        disabled={line.quantity <= 1}
+                      >
+                        −
+                      </button>
+                      <span
+                        className="min-w-[2rem] text-center tabular-nums text-white"
+                        aria-live="polite"
+                      >
+                        {line.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label={`Increase quantity of ${line.meal.name}`}
+                        onClick={() => onAdjustQuantity(line.meal.id, 1)}
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-lg font-semibold leading-none text-white transition hover:bg-white/15"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      aria-label={`Remove ${line.meal.name} from plan`}
+                      onClick={() => onRemoveLine(line.meal.id)}
+                      className="rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-orange-200 transition hover:bg-white/10 hover:text-white"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}

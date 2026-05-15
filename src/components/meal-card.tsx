@@ -3,11 +3,11 @@ import { formatCurrency } from "@/lib/plan";
 
 type MealCardProps = {
   meal: Meal;
-  isSelected: boolean;
+  quantityInPlan: number;
   onAdd: (meal: Meal) => void;
 };
 
-export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
+export function MealCard({ meal, quantityInPlan, onAdd }: MealCardProps) {
   return (
     <article className="group flex h-full flex-col rounded-3xl border border-stone-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-100">
       <div className="flex items-start justify-between gap-4">
@@ -51,16 +51,19 @@ export function MealCard({ meal, isSelected, onAdd }: MealCardProps) {
         </div>
         <button
           type="button"
-          disabled={isSelected}
-          aria-label={isSelected ? `${meal.name} added to plan` : undefined}
+          aria-label={
+            quantityInPlan > 0
+              ? `Add another ${meal.name} (${quantityInPlan} in plan)`
+              : `Add ${meal.name} to plan`
+          }
           onClick={() => onAdd(meal)}
           className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-            isSelected
-              ? "cursor-default bg-emerald-600 text-white"
+            quantityInPlan > 0
+              ? "bg-emerald-600 text-white hover:bg-emerald-700"
               : "bg-stone-950 text-white hover:bg-stone-800"
           }`}
         >
-          {isSelected ? "Added" : "Add to plan"}
+          {quantityInPlan > 0 ? `Add another (${quantityInPlan})` : "Add to plan"}
         </button>
       </div>
     </article>

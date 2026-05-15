@@ -3,11 +3,11 @@ import { MealCard } from "@/components/meal-card";
 
 type MealGridProps = {
   meals: Meal[];
-  selectedMealIds: string[];
+  quantityByMealId: Record<string, number>;
   onAddMeal: (meal: Meal) => void;
 };
 
-export function MealGrid({ meals, selectedMealIds, onAddMeal }: MealGridProps) {
+export function MealGrid({ meals, quantityByMealId, onAddMeal }: MealGridProps) {
   if (meals.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-orange-200 bg-orange-50/60 p-10 text-center">
@@ -31,7 +31,7 @@ export function MealGrid({ meals, selectedMealIds, onAddMeal }: MealGridProps) {
         <MealCard
           key={meal.id}
           meal={meal}
-          isSelected={selectedMealIds.includes(meal.id)}
+          quantityInPlan={quantityByMealId[meal.id] ?? 0}
           onAdd={onAddMeal}
         />
       ))}

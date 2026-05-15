@@ -17,11 +17,36 @@ export function CafePlanner() {
     [selectedDiet, maxPrepMinutes],
   );
 
+  const quantityByMealId = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const line of planLines) {
+      map[line.meal.id] = line.quantity;
+    }
+    return map;
+  }, [planLines]);
+
   function addMealToPlan(meal: Meal) {
     setPlanLines((lines) => {
-      if (lines.some((line) => line.meal.id === meal.id)) return lines;
-      return [...lines, { meal, quantity: 1 }];
+      const idx = lines.findIndex((line) => line.meal.id === meal.id);
+      if (idx === -1) return [...lines, { meal, quantity: 1 }];
+      return lines.map((line, i) =>
+        i === idx ? { ...line, quantity: line.quantity + 1 } : line,
+      );
     });
+  }
+
+  function adjustLineQuantity(mealId: string, delta: number) {
+    setPlanLines((lines) =>
+      lines.map((line) =>
+        line.meal.id === mealId
+          ? { ...line, quantity: Math.max(1, line.quantity + delta) }
+          : line,
+      ),
+    );
+  }
+
+  function removeLine(mealId: string) {
+    setPlanLines((lines) => lines.filter((line) => line.meal.id !== mealId));
   }
 
   return (
@@ -69,13 +94,15 @@ export function CafePlanner() {
             />
             <MealGrid
               meals={filteredMeals}
-              selectedMealIds={planLines.map((line) => line.meal.id)}
+              quantityByMealId={quantityByMealId}
               onAddMeal={addMealToPlan}
             />
           </div>
 
           <PlanSummary
             planLines={planLines}
+            onAdjustQuantity={adjustLineQuantity}
+            onRemoveLine={removeLine}
             onClear={() => setPlanLines([])}
           />
         </div>
