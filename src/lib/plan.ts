@@ -1,6 +1,6 @@
 import type { DietTag, Meal } from "@/lib/meals";
 
-/** One row in the lunch plan; quantity defaults to 1 until the multi-qty workshop extension. */
+/** One row in the lunch plan; quantity is at least 1 while the line exists. */
 export type PlanLine = {
   meal: Meal;
   quantity: number;
